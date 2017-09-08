@@ -23,7 +23,13 @@ public class TimedClient {
 
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new TimedClientHandler());
+                            ch.pipeline().addLast(
+                                    new TimedClientHandler1(),
+                                    new TimedClientHandler2(),
+                                    new TimedClientHandler3(),
+                                    new TimedClientHandler4(),
+                                    new TimedClientHandler5()
+                            );
                         }
 
                     })
