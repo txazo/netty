@@ -3,16 +3,16 @@ package test.netty.multi;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class WorkExector {
+public class WorkerExecutor {
 
-    private static final WorkExector INSTANCE = new WorkExector();
+    private static final WorkerExecutor INSTANCE = new WorkerExecutor();
 
     private ExecutorService executor = Executors.newFixedThreadPool(10);
 
-    private WorkExector() {
+    private WorkerExecutor() {
     }
 
-    public static WorkExector getInstance() {
+    public static WorkerExecutor getInstance() {
         return INSTANCE;
     }
 

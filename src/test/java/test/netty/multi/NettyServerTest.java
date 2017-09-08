@@ -3,6 +3,7 @@ package test.netty.multi;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import test.netty.multi.handler.ConnectedHandler;
+import test.netty.multi.handler.DefaultInAndOutBoundHandler;
 import test.netty.multi.handler.MessageReadHandler;
 
 public class NettyServerTest {
@@ -23,12 +24,13 @@ public class NettyServerTest {
         bossGroup.shutdownGracefully();
     }
 
-    private static Thread newServer(int i, int port, EventLoopGroup bossGroup, EventLoopGroup workerGroup) {
+    private static Thread newServer(int id, int port, EventLoopGroup bossGroup, EventLoopGroup workerGroup) {
         NettyServer server = new NettyServer(port, bossGroup, workerGroup);
         server.addHandler();
         server.addChildHandler(
-                new ConnectedHandler(),
-                new MessageReadHandler("Server" + i)
+                new DefaultInAndOutBoundHandler(),
+                new ConnectedHandler(id),
+                new MessageReadHandler(id, true)
         );
         Thread t = new Thread(server);
         t.start();

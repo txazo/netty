@@ -5,28 +5,38 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.lang3.RandomUtils;
-import test.netty.multi.WorkExector;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import test.netty.multi.WorkerExecutor;
 
 @ChannelHandler.Sharable
 public class MessageReadHandler extends ChannelInboundHandlerAdapter {
 
-    private String name;
+    private int tid;
+    private boolean server;
 
-    public MessageReadHandler(String name) {
-        this.name = name;
+    public MessageReadHandler(int tid, boolean server) {
+        this.tid = tid;
+        this.server = server;
+    }
+
+    private void printMessage(int oid, long time, boolean send) {
+        System.out.println(String.format("%s: sid=%d, cid=%d, time=%s",
+                send ? "Send" : "Recv",
+                server ? tid : oid,
+                server ? oid : tid,
+                DateFormatUtils.format(time, "yyyy-MM-dd HH:mm:ss")));
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
-        try {
-            long currentTimeMillis = buf.readLong();
-            System.out.println(name + " Read: " + currentTimeMillis);
-        } catch (Exception e) {
-            buf.release();
-        }
+        final int oid = buf.readInt();
+        long time = buf.readLong();
+        printMessage(oid, time, false);
+        buf.release();
 
-        WorkExector.getInstance().submit(new Runnable() {
+
+        WorkerExecutor.getInstance().submit(new Runnable() {
 
             @Override
             public void run() {
@@ -36,11 +46,12 @@ public class MessageReadHandler extends ChannelInboundHandlerAdapter {
                     e.printStackTrace();
                 }
 
-                long currentTimeMillis = System.currentTimeMillis();
-                System.out.println(name + " Write: " + currentTimeMillis);
+                long time = System.currentTimeMillis();
+                printMessage(oid, time, true);
 
                 ByteBuf buf = ctx.alloc().buffer(8);
-                buf.writeLong(currentTimeMillis);
+                buf.writeInt(tid);
+                buf.writeLong(time);
                 ctx.writeAndFlush(buf);
             }
 

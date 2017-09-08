@@ -2,6 +2,7 @@ package test.netty.multi;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import test.netty.multi.handler.DefaultInAndOutBoundHandler;
 import test.netty.multi.handler.MessageReadHandler;
 
 public class NettyClientTest {
@@ -9,7 +10,7 @@ public class NettyClientTest {
     private static final String HOST = "127.0.0.1";
 
     public static void main(String[] args) {
-        EventLoopGroup workerGroup = new NioEventLoopGroup(5);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(10);
 
         int size = 50;
         Thread[] threads = new Thread[size];
@@ -22,9 +23,12 @@ public class NettyClientTest {
         workerGroup.shutdownGracefully();
     }
 
-    private static Thread newClient(int i, int port, EventLoopGroup workerGroup) {
+    private static Thread newClient(int id, int port, EventLoopGroup workerGroup) {
         NettyClient client = new NettyClient(HOST, port, workerGroup);
-        client.addHandler(new MessageReadHandler("Client" + i));
+        client.addHandler(
+                new DefaultInAndOutBoundHandler(),
+                new MessageReadHandler(id, false)
+        );
         Thread t = new Thread(client);
         t.start();
         return t;
