@@ -2,7 +2,7 @@ package test.netty.multi;
 
 public abstract class ServerPortConfig {
 
-    private static final int[] PORTS = {9091, 9092, 9093};
+    private static final int[] PORTS = {9091};
 
     public static int[] getPorts() {
         return PORTS;

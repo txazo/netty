@@ -1,11 +1,11 @@
 package test.netty.multi.handler;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import test.netty.multi.Message;
 import test.netty.multi.WorkerExecutor;
 
 @ChannelHandler.Sharable
@@ -29,12 +29,13 @@ public class MessageReadHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        final int oid = buf.readInt();
-        long time = buf.readLong();
-        printMessage(oid, time, false);
-        buf.release();
+        if (!(msg instanceof Message)) {
+            ctx.fireChannelRead(msg);
+            return;
+        }
 
+        final Message message = (Message) msg;
+        printMessage(message.getId(), message.getTime(), false);
 
         WorkerExecutor.getInstance().submit(new Runnable() {
 
@@ -47,12 +48,9 @@ public class MessageReadHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 long time = System.currentTimeMillis();
-                printMessage(oid, time, true);
+                printMessage(message.getId(), time, true);
 
-                ByteBuf buf = ctx.alloc().buffer(8);
-                buf.writeInt(tid);
-                buf.writeLong(time);
-                ctx.writeAndFlush(buf);
+                ctx.writeAndFlush(new Message(tid, time));
             }
 
         });

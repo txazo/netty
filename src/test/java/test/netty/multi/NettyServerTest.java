@@ -2,15 +2,13 @@ package test.netty.multi;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import test.netty.multi.handler.ConnectedHandler;
-import test.netty.multi.handler.DefaultInAndOutBoundHandler;
-import test.netty.multi.handler.MessageReadHandler;
+import test.netty.multi.handler.*;
 
 public class NettyServerTest {
 
     public static void main(String[] args) {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(4);
-        EventLoopGroup workerGroup = new NioEventLoopGroup(5);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(1);
 
         int[] ports = ServerPortConfig.getPorts();
         Thread[] threads = new Thread[ports.length];
@@ -29,6 +27,7 @@ public class NettyServerTest {
         server.addHandler();
         server.addChildHandler(
                 new DefaultInAndOutBoundHandler(),
+                new MessageCodec(),
                 new ConnectedHandler(id),
                 new MessageReadHandler(id, true)
         );
