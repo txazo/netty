@@ -16,7 +16,7 @@ public class NettyServerTest {
             threads[i] = newServer(i, ports[i], bossGroup, workerGroup);
         }
 
-        waitClose(threads);
+        waitUtilClose(threads);
 
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
@@ -36,7 +36,7 @@ public class NettyServerTest {
         return t;
     }
 
-    private static void waitClose(Thread[] threads) {
+    private static void waitUtilClose(Thread[] threads) {
         for (Thread t : threads) {
             try {
                 t.join();

@@ -13,13 +13,13 @@ public class NettyClientTest {
     public static void main(String[] args) {
         EventLoopGroup workerGroup = new NioEventLoopGroup(1);
 
-        int size = 5;
+        int size = 1;
         Thread[] threads = new Thread[size];
         for (int i = 0; i < size; i++) {
             threads[i] = newClient(i, ServerPortConfig.selectPort(i), workerGroup);
         }
 
-        waitClose(threads);
+        waitUtilClose(threads);
 
         workerGroup.shutdownGracefully();
     }
@@ -36,7 +36,7 @@ public class NettyClientTest {
         return t;
     }
 
-    private static void waitClose(Thread[] threads) {
+    private static void waitUtilClose(Thread[] threads) {
         for (Thread t : threads) {
             try {
                 t.join();
