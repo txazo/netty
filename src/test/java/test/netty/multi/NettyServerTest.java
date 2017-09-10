@@ -7,7 +7,7 @@ import test.netty.multi.handler.*;
 public class NettyServerTest {
 
     public static void main(String[] args) {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(4);
         EventLoopGroup workerGroup = new NioEventLoopGroup(1);
 
         int[] ports = ServerPortConfig.getPorts();
@@ -24,9 +24,11 @@ public class NettyServerTest {
 
     private static Thread newServer(int id, int port, EventLoopGroup bossGroup, EventLoopGroup workerGroup) {
         NettyServer server = new NettyServer(port, bossGroup, workerGroup);
-        server.addHandler();
+        server.addHandler(
+                new ServerSocketChannelLoggerHandler()
+        );
         server.addChildHandler(
-                new DefaultInAndOutBoundHandler(),
+                new SocketChannelLoggerHandler(),
                 new MessageCodec(),
                 new ConnectedHandler(id),
                 new MessageReadHandler(id, true)

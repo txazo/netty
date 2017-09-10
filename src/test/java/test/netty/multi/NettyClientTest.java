@@ -2,9 +2,9 @@ package test.netty.multi;
 
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import test.netty.multi.handler.DefaultInAndOutBoundHandler;
 import test.netty.multi.handler.MessageCodec;
 import test.netty.multi.handler.MessageReadHandler;
+import test.netty.multi.handler.SocketChannelLoggerHandler;
 
 public class NettyClientTest {
 
@@ -27,7 +27,7 @@ public class NettyClientTest {
     private static Thread newClient(int id, int port, EventLoopGroup workerGroup) {
         NettyClient client = new NettyClient(HOST, port, workerGroup);
         client.addHandler(
-                new DefaultInAndOutBoundHandler(),
+                new SocketChannelLoggerHandler(),
                 new MessageCodec(),
                 new MessageReadHandler(id, false)
         );

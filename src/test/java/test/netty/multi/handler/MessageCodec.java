@@ -7,7 +7,7 @@ import io.netty.channel.ChannelPromise;
 import test.netty.multi.Message;
 
 @ChannelHandler.Sharable
-public class MessageCodec extends DefaultInAndOutBoundHandler {
+public class MessageCodec extends ChannelInAndOutBoundHandlerAdapter {
 
     private static final int MAGIC = 0xabee;
 
