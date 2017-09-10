@@ -50,7 +50,7 @@ public class MessageReadHandler extends ChannelInboundHandlerAdapter {
                 long time = System.currentTimeMillis();
                 printMessage(message.getId(), time, true);
 
-                ctx.channel().writeAndFlush(new Message(tid, time));
+                ctx.channel().write(new Message(tid, time));
             }
 
         });
