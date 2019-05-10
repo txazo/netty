@@ -20,7 +20,10 @@ public class NettyClient implements Client, Runnable {
         this.bootstrap = new Bootstrap();
         this.bootstrap.group(workerGroup)
                 .channel(NioSocketChannel.class)
-                .option(ChannelOption.SO_KEEPALIVE, true);
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
     }
 
     @Override
