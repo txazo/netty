@@ -41,7 +41,7 @@ public class NettyServer {
                                     .addLast(new SocketChannelLoggerHandler())
                                     .addLast(new RequestDecoder())
                                     .addLast(new ResponseEncoder())
-                                    .addLast(new UserServiceHandler());
+                                    .addLast(new RemoteServiceHandler());
                         }
 
                     });

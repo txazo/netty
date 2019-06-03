@@ -1,26 +1,17 @@
 package test.netty.core;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class Request implements Serializable {
 
     private static final long serialVersionUID = 1911848522746887092L;
 
-    private int userId;
-
-    public Request() {
-    }
-
-    public Request(int userId) {
-        this.userId = userId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    private long requestId;
+    private String classType;
+    private String methodName;
+    private Object[] args;
 
 }

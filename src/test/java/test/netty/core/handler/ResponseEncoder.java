@@ -11,12 +11,17 @@ import java.nio.charset.Charset;
 public class ResponseEncoder extends MessageToByteEncoder<Response> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Response msg, ByteBuf out) throws Exception {
-        byte[] messageBytes = msg.getMessage().getBytes(Charset.forName("UTF-8"));
-        out.writeByte(Constants.HEAD);
-        out.writeInt(4 + messageBytes.length);
-        out.writeInt(msg.getUserId());
-        out.writeBytes(messageBytes);
+    protected void encode(ChannelHandlerContext ctx, Response response, ByteBuf out) throws Exception {
+        byte[] dataBytes = response.getData().getBytes(Charset.forName("UTF-8"));
+
+        out.writeByte(Constants.MAGIC);
+        // length
+        out.writeInt(8 + 4 + dataBytes.length);
+        // responseId: 8
+        out.writeLong(response.getResponseId());
+        // data
+        out.writeInt(dataBytes.length);
+        out.writeBytes(dataBytes);
     }
 
 }

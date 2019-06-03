@@ -1,16 +1,20 @@
 package test.netty.core.service;
 
-import test.netty.core.Request;
-import test.netty.core.Response;
-
 public class UserServiceImpl implements UserService {
 
     @Override
-    public Response getUser(Request request) {
-        Response response = new Response();
-        response.setUserId(request.getUserId());
-        response.setMessage(String.valueOf(System.currentTimeMillis()));
-        return response;
+    public UserInfo getUser(int userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userId);
+        userInfo.setUserName("xxx");
+
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return userInfo;
     }
 
 }
