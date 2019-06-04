@@ -42,6 +42,7 @@ public class FutureHandler extends ChannelInAndOutBoundHandlerAdapter {
             request.setMethodName(context.getMethodName());
             request.setArgs(context.getArgs());
             futureMap.put(request.getRequestId(), context);
+
             ctx.channel().writeAndFlush(request);
         } else {
             super.write(ctx, msg, promise);
@@ -62,6 +63,5 @@ public class FutureHandler extends ChannelInAndOutBoundHandlerAdapter {
             super.channelRead(ctx, msg);
         }
     }
-
 
 }

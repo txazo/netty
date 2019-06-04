@@ -39,7 +39,7 @@ public class NettyClientProxy<T> implements InvocationHandler {
 
         }));
 
-        channel.writeAndFlush(context);
+        channel.write(context);
 
         String data = (String) context.getFuture().get();
         return JSON.parseObject(data, method.getReturnType());

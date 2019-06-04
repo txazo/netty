@@ -18,19 +18,21 @@ public class NettyClientTest {
         NettyClientProxy<UserService> clientProxy = new NettyClientProxy(UserService.class, client.getChannel());
         UserService userService = clientProxy.getRemoteProxy();
 
-        AtomicInteger counter = new AtomicInteger(1);
+        System.out.println(userService.getUser(1));
 
-        ExecutorService executorService = Executors.newFixedThreadPool(100);
-        List<CompletableFuture> tasks = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            tasks.add(CompletableFuture.runAsync(() -> {
-                while (true) {
-                    System.out.println(userService.getUser(counter.getAndIncrement()));
-                }
-            }, executorService));
-        }
-
-        CompletableFuture.allOf(tasks.toArray(new CompletableFuture[]{})).join();
+//        AtomicInteger counter = new AtomicInteger(1);
+//
+//        ExecutorService executorService = Executors.newFixedThreadPool(10);
+//        List<CompletableFuture> tasks = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            tasks.add(CompletableFuture.runAsync(() -> {
+//                while (true) {
+//                    System.out.println(userService.getUser(counter.getAndIncrement()));
+//                }
+//            }, executorService));
+//        }
+//
+//        CompletableFuture.allOf(tasks.toArray(new CompletableFuture[]{})).join();
     }
 
 }

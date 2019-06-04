@@ -36,7 +36,7 @@ public class NettyClient {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline()
-                        .addLast(new SocketChannelLoggerHandler())
+//                        .addLast(new SocketChannelLoggerHandler())
                         .addLast(new RequestEncoder())
                         .addLast(new ResponseDecoder())
                         .addLast(new FutureHandler());

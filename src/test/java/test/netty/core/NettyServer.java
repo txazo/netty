@@ -38,7 +38,7 @@ public class NettyServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline()
-                                    .addLast(new SocketChannelLoggerHandler())
+//                                    .addLast(new SocketChannelLoggerHandler())
                                     .addLast(new RequestDecoder())
                                     .addLast(new ResponseEncoder())
                                     .addLast(new RemoteServiceHandler());
